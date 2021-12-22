@@ -35,8 +35,8 @@ class Article(db.Model):
 
 
 class User(db.Model):
-    column_display_pk = True
-    user_login = db.Column(db.String(200), primary_key=True)  # Need to do as a primary key
+    user_id = db.Column(db.Integer, primary_key=True)
+    user_login = db.Column(db.String(200), unique=True)
     user_password = db.Column(db.String(200))
     user_name = db.Column(db.String(200))
     user_surname = db.Column(db.String(200), nullable=True)
@@ -162,4 +162,4 @@ admin.add_view(ModelView(User, db.session))
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
