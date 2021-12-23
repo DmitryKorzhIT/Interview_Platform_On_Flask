@@ -31,6 +31,7 @@ class User(db.Model):
     name = db.Column(db.String(200))
     surname = db.Column(db.String(200), nullable=True)
     type = db.Column(db.String(200))
+
     user_interview_questions = db.relationship('UserInterviewQuestion', backref='user')
     user_interviews = db.relationship('UserInterview', backref='user')
 
@@ -62,12 +63,55 @@ class UserInterview(db.Model):
         return '<UserInterview %r>' % self.id
 
 
-# class InterviewQuestion(db.Model):
-#     __tablename__ = 'interview_question'
-#
-#     id
-#     interview_id
-#     question_id
+class Interview(db.Model):
+    __tablename__ = 'interview'
+
+    id = db.Column(db.Integer, primary_key=True)
+    candidate_name = db.Column(db.String(200))
+    candidate_surname = db.Column(db.String(200))
+    tags = db.Column(db.String(1000))  # Need to convert to JSON array
+    date_time = db.Column(db.DateTime)
+    link_zoom = db.Column(db.String(1000))
+    total_mark = db.Column(db.Integer)  # Need to calculate by yourself
+
+    interview_ids = db.relationship('InterviewQuestion', backref='interview')
+
+    def __repr__(self):
+        return 'Interview %r' % self.id
+
+
+class InterviewQuestion(db.Model):
+    __tablename__ = 'interview_question'
+
+    id = db.Column(db.Integer, primary_key=True)
+    interview_id = db.Column(db.Integer, db.ForeignKey('interview.id'))
+    # question_id
+
+    def __repr__(self):
+        return 'InterviewQuestion %r' % self.id
+
+
+class Question(db.Model):
+    __tablename__ = 'question'
+
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.Text)
+    answear = db.Column(db.Text)
+    tags = db.Column(db.String(1000))  # Need to be JSON array
+
+    def __repr__(self):
+        return 'Question %r' % self.id
+
+
+class QuestionSet(db.Model):
+    __tablename__ = 'question_set'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(1000))
+    tags = db.Column(db.String(1000))  # Need to be JSON array
+
+    def __repr__(self):
+        return 'QuestionSet %r' % self.id
 # --------------------------------------------------- END CLASSES ------------------------------------------------------
 
 
@@ -158,6 +202,10 @@ admin = Admin(app, name='interview platform', template_mode='bootstrap3')
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(UserInterviewQuestion, db.session))
 admin.add_view(ModelView(UserInterview, db.session))
+admin.add_view(ModelView(Interview, db.session))
+admin.add_view(ModelView(InterviewQuestion, db.session))
+admin.add_view(ModelView(Question, db.session))
+admin.add_view(ModelView(QuestionSet, db.session))
 # --------------------------------------------------- END ADMIN --------------------------------------------------------
 
 if __name__ == '__main__':
