@@ -35,22 +35,30 @@ class Article(db.Model):
 
 
 class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    user_login = db.Column(db.String(200), unique=True)
-    user_password = db.Column(db.String(200))
-    user_name = db.Column(db.String(200))
-    user_surname = db.Column(db.String(200), nullable=True)
-    user_type = db.Column(db.String(200))
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    login = db.Column(db.String(200), unique=True)
+    password = db.Column(db.String(200))
+    name = db.Column(db.String(200))
+    surname = db.Column(db.String(200), nullable=True)
+    type = db.Column(db.String(200))
+    user_interview_questions = db.relationship('UserInterviewQuestion', backref='user')
 
     def __repr__(self):
-        return '<User %r>' % self.user_login
+        return '<User %r>' % self.login
 
 
+class UserInterviewQuestion(db.Model):
+    __tablename__ = 'user_interview_question'
+    id = db.Column(db.Integer, primary_key=True)
+    # interview_question_id =
+    user_login = db.Column(db.String(200), db.ForeignKey('user.login'))
+    mark = db.Column(db.Integer)
 
-# class User_interview(db.Model):
-#     pass
-#
-#
+    def __repr__(self):
+        return '<UserInterviewQuestion %r>' % self.id
+
+
 # class Interview(db.Model):
 #     pass
 #
@@ -158,6 +166,7 @@ admin = Admin(app, name='interview platform', template_mode='bootstrap3')
 
 admin.add_view(ModelView(Article, db.session))
 admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(UserInterviewQuestion, db.session))
 # --------------------------------------------------- END ADMIN --------------------------------------------------------
 
 if __name__ == '__main__':
