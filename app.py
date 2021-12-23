@@ -22,20 +22,9 @@ db = SQLAlchemy(app)
 
 
 # ----------------------------------------------------- CLASSES --------------------------------------------------------
-class Article(db.Model):
-    __tablename__='articles'
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    intro = db.Column(db.String(300), nullable=False)
-    text = db.Column(db.Text, nullable=False)
-    date = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __repr__(self):
-        return '<Article %r>' % self.id
-
-
 class User(db.Model):
     __tablename__ = 'user'
+
     id = db.Column(db.Integer, primary_key=True)
     login = db.Column(db.String(200), unique=True)
     password = db.Column(db.String(200))
@@ -43,6 +32,7 @@ class User(db.Model):
     surname = db.Column(db.String(200), nullable=True)
     type = db.Column(db.String(200))
     user_interview_questions = db.relationship('UserInterviewQuestion', backref='user')
+    user_interviews = db.relationship('UserInterview', backref='user')
 
     def __repr__(self):
         return '<User %r>' % self.login
@@ -50,33 +40,34 @@ class User(db.Model):
 
 class UserInterviewQuestion(db.Model):
     __tablename__ = 'user_interview_question'
+
     id = db.Column(db.Integer, primary_key=True)
-    # interview_question_id =
     user_login = db.Column(db.String(200), db.ForeignKey('user.login'))
     mark = db.Column(db.Integer)
+    # interview_question_id =
 
     def __repr__(self):
         return '<UserInterviewQuestion %r>' % self.id
 
 
-# class Interview(db.Model):
-#     pass
+class UserInterview(db.Model):
+    __tablename__ = 'user_interview'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_login = db.Column(db.String(200), db.ForeignKey('user.login'))
+    user_comment = db.Column(db.Text)
+    # interview_id
+
+    def __repr__(self):
+        return '<UserInterview %r>' % self.id
+
+
+# class InterviewQuestion(db.Model):
+#     __tablename__ = 'interview_question'
 #
-#
-# class Interview_question(db.Model):
-#     pass
-#
-#
-# class User_interview_question(db.Model):
-#     pass
-#
-#
-# class Question(db.Model):
-#     pass
-#
-#
-# class Question_set(db.Model):
-#     pass
+#     id
+#     interview_id
+#     question_id
 # --------------------------------------------------- END CLASSES ------------------------------------------------------
 
 
@@ -164,9 +155,9 @@ def create_article():
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'  # Set style
 admin = Admin(app, name='interview platform', template_mode='bootstrap3')
 
-admin.add_view(ModelView(Article, db.session))
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(UserInterviewQuestion, db.session))
+admin.add_view(ModelView(UserInterview, db.session))
 # --------------------------------------------------- END ADMIN --------------------------------------------------------
 
 if __name__ == '__main__':
