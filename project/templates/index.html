@@ -6,7 +6,11 @@ The main page.
 
 {% block body %}
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
-    <h1 class="display-4 fw-normal">Pricing</h1>
+    <h1 class="display-4 fw-normal">Pricing for you, {{ user.username }}!</h1>
+
+    {% for post in posts %}
+    <h4>{{ post.author.username }} says: <b>{{post.body}}</b></h4>
+    {% endfor %}
     <p class="fs-5 text-muted">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It’s built with default Bootstrap components and utilities with little customization.</p>
 </div>
 

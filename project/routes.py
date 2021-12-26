@@ -8,7 +8,18 @@ from flask import render_template  # Using for html templates
 @app.route('/')  # '@' is a decorator. In brackets path to a specific page on a website.
 @app.route('/home')
 def index():
-    return render_template("index.html")  # Show specific page from 'templates' directory on domain name '.../home'
+    user = {'username': 'Miguel'}
+    posts = [
+        {'author': {'username': 'Jerry'},
+         'body': 'Beeing a good author is a job 24/7.'},
+        {'author': {'username': 'Susan'},
+         'body': 'The weather is always good.'},
+        {'author': {'username': 'Oakla'},
+         'body': 'Listen the music.'},
+        {'author': {'username': 'Pronx'},
+         'body': 'Or watch the galery.'}
+    ]
+    return render_template("index.html", user=user, posts=posts)
 
 
 @app.route('/about')
