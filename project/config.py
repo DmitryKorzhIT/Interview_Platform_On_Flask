@@ -6,8 +6,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # os.path.abspath(path) - возвращает нормализованный абсолютный путь
 
 
-class Config:
+class Config(object):
     SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:1@localhost/Interview_Platform'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = '1'
+    SECRET_KEY = os.environ.get('SECRET_KEY') or '1'
     DEBUG = True
