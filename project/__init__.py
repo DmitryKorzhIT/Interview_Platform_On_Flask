@@ -15,7 +15,7 @@ from flask_admin.contrib.sqla import ModelView
 
 # ----------------------------------------------------- ADMIN ----------------------------------------------------------
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'  # Set style
-admin = Admin(app, name='interview platform', template_mode='bootstrap3')
+admin = Admin(app, name='Platform for Interview', template_mode='bootstrap3')
 
 admin.add_view(ModelView(models.User, db.session))
 admin.add_view(ModelView(models.UserInterviewQuestion, db.session))

@@ -8,23 +8,16 @@ from project.forms import LoginForm
 @app.route('/')  # '@' is a decorator. In brackets path to a specific page on a website.
 @app.route('/home')
 def index():
-    user = {'username': 'Miguel'}
-    posts = [
-        {'author': {'username': 'Jerry'},
-         'body': 'Beeing a good author is a job 24/7.'},
-        {'author': {'username': 'Susan'},
-         'body': 'The weather is always good.'},
-        {'author': {'username': 'Oakla'},
-         'body': 'Listen the music.'},
-        {'author': {'username': 'Pronx'},
-         'body': 'Or watch the galery.'}
-    ]
-    return render_template("index.html", user=user, posts=posts)
+    return render_template("index.html")
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(
+            form.username.data, form.remember_me.data))
+        return redirect('/index')
     return render_template('login.html', title='Sign In', form=form)
 
 
